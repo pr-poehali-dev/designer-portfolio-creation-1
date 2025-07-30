@@ -3,9 +3,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import ProjectModal from '@/components/ProjectModal';
 
 const Index = () => {
   const [activeFilter, setActiveFilter] = useState('все');
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Animation hooks for sections
   const heroRef = useIntersectionObserver({ threshold: 0.3 });
@@ -20,21 +23,48 @@ const Index = () => {
       title: 'Веб-дизайн',
       description: 'Минималистичный дизайн корпоративного сайта',
       category: 'веб',
-      image: '/img/7e5617ab-1c07-49f9-88a3-733efc298cd2.jpg'
+      image: '/img/7e5617ab-1c07-49f9-88a3-733efc298cd2.jpg',
+      detailedDescription: 'Комплексный редизайн корпоративного веб-сайта с фокусом на минимализм и функциональность. Проект включал полный UX/UI аудит, создание пользовательских сценариев и разработку адаптивного дизайна.',
+      processImages: ['/img/80e9340f-f847-4d89-8e3c-f7979f168513.jpg'],
+      technologies: ['Figma', 'HTML/CSS', 'JavaScript'],
+      duration: '3 месяца',
+      client: 'TechCorp',
+      year: '2024',
+      challenges: 'Клиент нуждался в современном веб-сайте, который отражал бы инновационность компании, но при этом был бы простым в навигации.',
+      solution: 'Создал минималистичный дизайн с чёткой типографикой и интуитивной навигацией. Использовал монохромную палитру с яркими акцентами.',
+      results: ['Увеличение конверсии на 40%', 'Снижение показателя отказов на 60%', 'Положительные отзывы от клиентов', 'Повышение узнаваемости бренда']
     },
     {
       id: 2,
       title: 'Брендинг',
       description: 'Создание фирменного стиля и логотипа',
       category: 'брендинг',
-      image: '/img/aa44fc8c-9fed-454d-9f32-dcf97064cf63.jpg'
+      image: '/img/aa44fc8c-9fed-454d-9f32-dcf97064cf63.jpg',
+      detailedDescription: 'Комплексная разработка фирменного стиля для стартапа в сфере финтеха. Проект включал исследование рынка, разработку логотипа, цветовой палитры и руководства по применению.',
+      processImages: ['/img/1b855810-6994-46ac-84d0-81671fe70dc5.jpg'],
+      technologies: ['Illustrator', 'Photoshop', 'InDesign'],
+      duration: '2 месяца',
+      client: 'FinStart',
+      year: '2024',
+      challenges: 'Новому бренду нужно было выделиться на конкурентном рынке финансовых услуг и вызвать доверие у клиентов.',
+      solution: 'Создал лаконичный логотип с геометрическими элементами, отражающими надёжность и инновационность. Использовал синие оттенки с чёрно-белыми акцентами.',
+      results: ['Успешный запуск бренда', 'Положительные отзывы о фирменном стиле', 'Увеличение узнаваемости на 35%', 'Привлечение партнёров и инвесторов']
     },
     {
       id: 3,
       title: 'Мобильное приложение',
       description: 'UI/UX дизайн мобильного приложения',
       category: 'мобильные',
-      image: '/img/711ab288-03c7-4ec9-8ac6-b2c8f1abfb28.jpg'
+      image: '/img/711ab288-03c7-4ec9-8ac6-b2c8f1abfb28.jpg',
+      detailedDescription: 'Проектирование и разработка пользовательского интерфейса для мобильного приложения фитнес-трекера. Проект включал создание пользовательских путей, вайрфреймов и готовых мокапов.',
+      processImages: ['/img/5737d54f-bd1e-4616-80c4-41e76a8eaf54.jpg'],
+      technologies: ['Figma', 'Sketch', 'Principle'],
+      duration: '4 месяца',
+      client: 'FitTracker',
+      year: '2023',
+      challenges: 'Нужно было создать простое в использовании приложение, которое мотивировало бы пользователей заниматься спортом регулярно.',
+      solution: 'Создал интуитивный интерфейс с крупными кнопками, понятными иконками и системой гамификации. Использовал яркие акцентные цвета.',
+      results: ['Высокие оценки в App Store (4.8/5)', 'Увеличение времени в приложении на 70%', 'Рост активных пользователей на 50%', 'Положительные отзывы о UX']
     }
   ];
 
@@ -61,6 +91,16 @@ const Index = () => {
   const filteredItems = activeFilter === 'все' 
     ? portfolioItems 
     : portfolioItems.filter(item => item.category === activeFilter);
+
+  const handleProjectClick = (project) => {
+    setSelectedProject(project);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProject(null);
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -189,7 +229,8 @@ const Index = () => {
             {filteredItems.map((item) => (
               <Card 
                 key={item.id} 
-                className="group border-0 shadow-sm hover:shadow-xl transition-all duration-300"
+                className="group border-0 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer"
+                onClick={() => handleProjectClick(item)}
               >
                 <div className="relative overflow-hidden">
                   <img 
@@ -304,6 +345,13 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      {/* Project Modal */}
+      <ProjectModal 
+        project={selectedProject}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </div>
   );
 };
