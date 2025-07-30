@@ -2,9 +2,17 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 const Index = () => {
   const [activeFilter, setActiveFilter] = useState('все');
+
+  // Animation hooks for sections
+  const heroRef = useIntersectionObserver({ threshold: 0.3 });
+  const aboutRef = useIntersectionObserver({ threshold: 0.3 });
+  const portfolioRef = useIntersectionObserver({ threshold: 0.2 });
+  const servicesRef = useIntersectionObserver({ threshold: 0.3 });
+  const contactRef = useIntersectionObserver({ threshold: 0.3 });
 
   const portfolioItems = [
     {
@@ -75,7 +83,12 @@ const Index = () => {
       {/* Hero Section */}
       <section id="home" className="pt-24 pb-20 px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center max-w-4xl mx-auto">
+          <div 
+            ref={heroRef.ref}
+            className={`text-center max-w-4xl mx-auto animate-slide-up ${
+              heroRef.isIntersecting ? 'animate-visible' : ''
+            }`}
+          >
             <h2 className="text-6xl md:text-7xl font-bold text-black mb-6 tracking-tight">
               CREATIVE
               <br />
@@ -95,7 +108,12 @@ const Index = () => {
       {/* About Section */}
       <section id="about" className="py-20 px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
+          <div 
+            ref={aboutRef.ref}
+            className={`grid md:grid-cols-2 gap-16 items-center animate-on-scroll ${
+              aboutRef.isIntersecting ? 'animate-visible' : ''
+            }`}
+          >
             <div>
               <h3 className="text-4xl font-bold text-black mb-6">Обо мне</h3>
               <p className="text-gray-700 text-lg mb-6 leading-relaxed">
@@ -132,7 +150,12 @@ const Index = () => {
       {/* Portfolio Section */}
       <section id="portfolio" className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
+          <div 
+            ref={portfolioRef.ref}
+            className={`text-center mb-16 animate-slide-up ${
+              portfolioRef.isIntersecting ? 'animate-visible' : ''
+            }`}
+          >
             <h3 className="text-4xl font-bold text-black mb-6">Портфолио</h3>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
               Избранные проекты, демонстрирующие мой подход к созданию 
@@ -160,12 +183,13 @@ const Index = () => {
           </div>
 
           {/* Portfolio Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredItems.map((item, index) => (
+          <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-children ${
+            portfolioRef.isIntersecting ? 'animate-visible' : ''
+          }`}>
+            {filteredItems.map((item) => (
               <Card 
                 key={item.id} 
-                className="group border-0 shadow-sm hover:shadow-xl transition-all duration-300 animate-fade-in"
-                style={{ animationDelay: `${index * 0.1}s` }}
+                className="group border-0 shadow-sm hover:shadow-xl transition-all duration-300"
               >
                 <div className="relative overflow-hidden">
                   <img 
@@ -192,14 +216,21 @@ const Index = () => {
       {/* Services Section */}
       <section id="services" className="py-20 px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
+          <div 
+            ref={servicesRef.ref}
+            className={`text-center mb-16 animate-slide-up ${
+              servicesRef.isIntersecting ? 'animate-visible' : ''
+            }`}
+          >
             <h3 className="text-4xl font-bold text-black mb-6">Услуги</h3>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
               Предлагаю комплексные дизайн-решения для бизнеса любого масштаба
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className={`grid md:grid-cols-3 gap-8 stagger-children ${
+            servicesRef.isIntersecting ? 'animate-visible' : ''
+          }`}>
             {services.map((service, index) => (
               <Card key={index} className="text-center p-8 border-0 shadow-sm hover:shadow-lg transition-shadow">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-black rounded-full mb-6">
@@ -215,7 +246,12 @@ const Index = () => {
 
       {/* Contact Section */}
       <section id="contact" className="py-20 px-6">
-        <div className="max-w-4xl mx-auto text-center">
+        <div 
+          ref={contactRef.ref}
+          className={`max-w-4xl mx-auto text-center animate-scale ${
+            contactRef.isIntersecting ? 'animate-visible' : ''
+          }`}
+        >
           <h3 className="text-4xl font-bold text-black mb-6">Контакты</h3>
           <p className="text-gray-600 text-lg mb-12 max-w-2xl mx-auto">
             Готов обсудить ваш проект и создать дизайн, который поможет достичь ваших целей
